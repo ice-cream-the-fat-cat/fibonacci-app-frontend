@@ -1,19 +1,25 @@
+import { ThemeProvider } from "@material-ui/core";
 import { Suspense } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { RecoilRoot } from "recoil";
-import { Header } from "./components/Header";
+import { AppWrapper } from "./components/AppWrapper";
+import { Loading } from "./components/LoadingWrapper/Loading";
 import { Routes } from "./routes";
-const Loading = () => <div>Page Loading...</div>;
+import { MyNiwaTheme } from "./utils/UITheme";
+
 const App = () => {
   return (
     <div>
       <RecoilRoot>
-        <Router>
-          <Header />
-          <Suspense fallback={<Loading />}>
-            <Routes />
-          </Suspense>
-        </Router>
+        <AppWrapper>
+          <Router>
+            <ThemeProvider theme={MyNiwaTheme}>
+              <Suspense fallback={<Loading />}>
+                <Routes />
+              </Suspense>
+            </ThemeProvider>
+          </Router>
+        </AppWrapper>
       </RecoilRoot>
     </div>
   );
