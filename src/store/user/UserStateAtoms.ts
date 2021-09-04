@@ -1,12 +1,17 @@
-import { atom } from 'recoil'
+import { atom } from "recoil";
 
-type UserData = {
-  id: string
-  displayName: string
-  imageUrl: string | null
-}
+type UserData =
+  | {
+      id: string;
+      displayName: string;
+      imageUrl: string | null;
+      isLoggedIn: true;
+    }
+  | {
+      isLoggedIn: false | null;
+    };
 
-export const userState = atom<UserData | undefined>({
-  key: 'userData',
-  default: undefined,
-})
+export const userState = atom<UserData>({
+  key: "userData",
+  default: { isLoggedIn: null },
+});
