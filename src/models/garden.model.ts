@@ -1,3 +1,4 @@
+import { CompletedTask } from "./completedTask.model";
 import { Rule } from "./rule.model";
 
 export interface Garden {
@@ -5,6 +6,9 @@ export interface Garden {
   name: string;
   description: string;
   fireBaseUserId: string;
+  createdDate: string;
+  lastUpdate: string;
+  gardenCategoryId: string;
 }
 
 export interface PopulatedGarden {
@@ -13,4 +17,5 @@ export interface PopulatedGarden {
     name: string;
   };
   rules: Rule[];
+  completedTasks: CompletedTask[];
 }
