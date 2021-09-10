@@ -1,0 +1,20 @@
+.spinnerContainer {
+  border-radius: 50%;
+  height: 20vh;
+  width: 20vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinnerContainerSmall {
+  border-radius: 50%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  width: 100%;
+}
