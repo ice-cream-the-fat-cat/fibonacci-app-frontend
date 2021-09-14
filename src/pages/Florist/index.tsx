@@ -9,6 +9,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { LoadingWrapper } from "../../components/LoadingWrapper";
+import { Title } from "../../components/Title/Title";
 import { buyFlower } from "../../helpers/api/flowers/buyFlower";
 import { getFlowers } from "../../helpers/api/flowers/getFlowers";
 import { useUserState } from "../../store/user/useUserState";
@@ -26,9 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: "2%",
       marginLeft: "5%",
       width: "100%",
-    },
-    title: {
-      margin: "1rem 0",
     },
     subtitle: {
       margin: "2%",
@@ -174,9 +172,7 @@ export const Florist = () => {
         justifyContent="center"
         className={classes.header}
       >
-        <Grid container justifyContent="flex-start">
-          <h1 className={classes.title}>Florist</h1>
-        </Grid>
+        <Title title="Florist" />
         <Grid container direction="row" justifyContent="center">
           {errMsgVis && buyFlowerError ? (
             <Typography className={classes.errorMsg}>

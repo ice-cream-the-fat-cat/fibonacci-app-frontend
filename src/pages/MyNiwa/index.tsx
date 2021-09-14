@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { useEffect, useMemo } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { LoadingWrapper } from "../../components/LoadingWrapper";
+import { Title } from "../../components/Title/Title";
 import { getCategories } from "../../helpers/api/gardens/getCategories";
 import { getGardens } from "../../helpers/api/gardens/getGardens";
 import { usePageState } from "../../store/page/usePageState";
@@ -98,13 +99,7 @@ export const MyNiwa = () => {
       exit={{ opacity: 0 }}
     >
       <div className="my-gardens-container">
-        <Grid
-          container
-          className={classes.myNiwaHeader}
-          direction="row"
-          justifyContent="space-between"
-        >
-          <h1>My Niwa</h1>
+        <Title title="My Niwa">
           <Tooltip arrow classes={tooltipStyles} title="Add Flower Bed">
             <IconButton
               className={classes.createGarden}
@@ -113,7 +108,7 @@ export const MyNiwa = () => {
               <AddIcon />
             </IconButton>
           </Tooltip>
-        </Grid>
+        </Title>
         <LoadingWrapper
           isLoading={!gardensApi.isLoaded || !categoriesApi.isLoaded}
         >
