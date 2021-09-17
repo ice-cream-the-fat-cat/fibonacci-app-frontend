@@ -13,6 +13,7 @@ import ArrowRightIcon from "@material-ui/icons/ArrowRight";
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { Head } from "../../components/Head";
 import {
   createGarden,
   NewGardenData,
@@ -21,6 +22,8 @@ import {
   createGardenRules,
   NewGardenRule,
 } from "../../helpers/api/gardens/createGardenRules";
+import { getCategories } from "../../helpers/api/gardens/getCategories";
+import { usePageState } from "../../store/page/usePageState";
 import { useUserState } from "../../store/user/useUserState";
 import { useApi } from "../../utils/api/useApi";
 import { AddRules } from "./components/AddRules";
@@ -57,6 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export const CreateGarden = () => {
   const { userData } = useUserState();
+  const { setCurrentPage } = usePageState();
   const history = useHistory();
   const classes = useStyles();
 
@@ -86,11 +90,37 @@ export const CreateGarden = () => {
   // Garden input state
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [categoryName, setCategoryName] = useState("");
+
+  // Get Categories
+  const [categoriesApi, getGardenCategories] = useApi(getCategories);
+  const categories = useMemo(() => categoriesApi.response, [categoriesApi]);
+  useEffect(() => {
+    getGardenCategories();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    let result;
+    if (categoryId) {
+      result = categories?.find(
+        (category) => category._id === categoryId
+      )?.name;
+    }
+    setCategoryName(result);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryId]);
+
   const nameChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setName(() => e.target.value);
   };
   const descChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDesc(e.target.value);
+  };
+  const categoryIdChangeHandler = (
+    e: React.ChangeEvent<{ name?: string | undefined; value: unknown }>
+  ) => {
+    setCategoryId(e.target.value as string);
   };
 
   // Garden rules input state
@@ -130,7 +160,7 @@ export const CreateGarden = () => {
       name: name,
       description: desc,
       fireBaseUserId: (userData.isLoggedIn && userData.id) || "",
-      gardenCategoryId: "TODO: ADD gardenCategoryID when implementing it",
+      gardenCategoryId: categoryId || "",
     };
 
     await createNewGarden(newGarden);
@@ -144,6 +174,7 @@ export const CreateGarden = () => {
         gardenId,
       }));
       await createNewGardenRules(rules);
+      setCurrentPage(`/user/dailyGardening/${gardenId}`);
       history.push(`/user/dailyGardening/${gardenId}`);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -161,92 +192,100 @@ export const CreateGarden = () => {
   }, [createGardenApi.response, createGardenApi.status]);
 
   return (
-    <Grid
-      container={true}
-      direction="column"
-      alignItems="center"
-      justifyContent="space-between"
-      className={classes.root}
-      component={motion.div}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3 }}
-      exit={{ opacity: 0 }}
-    >
-      <Container className={classes.root} component={motion.div}>
-        <Paper className={classes.card} elevation={0}>
-          <Grid container className={classes.container}>
-            <AnimatePresence>
-              {activeStep === 0 && (
-                <NewGarden
-                  nameChangeHandler={nameChangeHandler}
-                  name={name}
-                  descChangeHandler={descChangeHandler}
-                  desc={desc}
-                  animDirection={animDirection}
-                />
-              )}
-              {activeStep === 1 && (
-                <AddRules
-                  ruleNameChangeHandler={ruleNameChangeHandler}
-                  ruleName={ruleName}
-                  ruleDescChangeHandler={ruleDescChangeHandler}
-                  ruleDesc={ruleDesc}
-                  addRuleHandler={addRuleHandler}
-                  userRules={userRules}
-                  animDirection={animDirection}
-                  removeRule={removeRule}
-                />
-              )}
-              {activeStep === 2 && (
-                <GardenSummary
-                  loading={isApiProcessing}
-                  gardenName={name}
-                  gardenDesc={desc}
-                  userRules={userRules}
-                  createGardenHandler={createGardenHandler}
-                  animDirection={animDirection}
-                />
-              )}
-            </AnimatePresence>
-          </Grid>
-          <MobileStepper
-            variant="progress"
-            steps={3}
-            position="static"
-            className={classes.stepper}
-            activeStep={activeStep}
-            nextButton={
-              <Button
-                size="small"
-                variant="contained"
-                color="primary"
-                endIcon={<ArrowRightIcon />}
-                onClick={handleNext}
-                disabled={
-                  activeStep === 2 ||
-                  name.length < 1 ||
-                  (activeStep === 1 && userRules.length < 1)
-                }
-              >
-                Next
-              </Button>
-            }
-            backButton={
-              <Button
-                size="small"
-                variant="contained"
-                color="primary"
-                startIcon={<ArrowLeftIcon />}
-                onClick={handleBack}
-                disabled={activeStep === 0 || isApiProcessing}
-              >
-                Back
-              </Button>
-            }
-          />
-        </Paper>
-      </Container>
-    </Grid>
+    <>
+      <Head title="Add Flower Bed" />
+      <Grid
+        container={true}
+        direction="column"
+        alignItems="center"
+        justifyContent="space-between"
+        className={classes.root}
+        component={motion.div}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        exit={{ opacity: 0 }}
+      >
+        <Container className={classes.root} component={motion.div}>
+          <Paper className={classes.card} elevation={0}>
+            <Grid container className={classes.container}>
+              <AnimatePresence>
+                {activeStep === 0 && (
+                  <NewGarden
+                    nameChangeHandler={nameChangeHandler}
+                    name={name}
+                    descChangeHandler={descChangeHandler}
+                    desc={desc}
+                    categories={categories}
+                    categoryIdChangeHandler={categoryIdChangeHandler}
+                    categoryId={categoryId}
+                    animDirection={animDirection}
+                  />
+                )}
+                {activeStep === 1 && (
+                  <AddRules
+                    ruleNameChangeHandler={ruleNameChangeHandler}
+                    ruleName={ruleName}
+                    ruleDescChangeHandler={ruleDescChangeHandler}
+                    ruleDesc={ruleDesc}
+                    addRuleHandler={addRuleHandler}
+                    userRules={userRules}
+                    animDirection={animDirection}
+                    removeRule={removeRule}
+                  />
+                )}
+                {activeStep === 2 && (
+                  <GardenSummary
+                    loading={isApiProcessing}
+                    gardenName={name}
+                    gardenDesc={desc}
+                    gardenCategoryName={categoryName}
+                    userRules={userRules}
+                    createGardenHandler={createGardenHandler}
+                    animDirection={animDirection}
+                  />
+                )}
+              </AnimatePresence>
+            </Grid>
+            <MobileStepper
+              variant="progress"
+              steps={3}
+              position="static"
+              className={classes.stepper}
+              activeStep={activeStep}
+              nextButton={
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  endIcon={<ArrowRightIcon />}
+                  onClick={handleNext}
+                  disabled={
+                    activeStep === 2 ||
+                    name.length < 1 ||
+                    (activeStep === 1 && userRules.length < 1) ||
+                    !categoryId
+                  }
+                >
+                  Next
+                </Button>
+              }
+              backButton={
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="primary"
+                  startIcon={<ArrowLeftIcon />}
+                  onClick={handleBack}
+                  disabled={activeStep === 0 || isApiProcessing}
+                >
+                  Back
+                </Button>
+              }
+            />
+          </Paper>
+        </Container>
+      </Grid>
+    </>
   );
 };

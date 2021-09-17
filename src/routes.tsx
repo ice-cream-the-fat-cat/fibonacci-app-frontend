@@ -8,22 +8,33 @@ import { useUserState } from "./store/user/useUserState";
 const About = React.lazy(() =>
   import("./pages/About").then(({ About }) => ({ default: About }))
 );
+
 const Home = React.lazy(() =>
   import("./pages/Home").then(({ Home }) => ({ default: Home }))
 );
+
 const MyNiwa = React.lazy(() =>
   import("./pages/MyNiwa").then(({ MyNiwa }) => ({ default: MyNiwa }))
 );
+
+const Settings = React.lazy(() =>
+  import("./pages/Settings").then(({ Settings }) => ({
+    default: Settings,
+  }))
+);
+
 const DailyGardening = React.lazy(() =>
   import("./pages/DailyGardening").then(({ DailyGardening }) => ({
     default: DailyGardening,
   }))
 );
+
 const CreateGarden = React.lazy(() =>
   import("./pages/CreateGarden").then(({ CreateGarden }) => ({
     default: CreateGarden,
   }))
 );
+
 const NotFound = React.lazy(() =>
   import("./pages/NotFound").then(({ NotFound }) => ({
     default: NotFound,
@@ -32,6 +43,12 @@ const NotFound = React.lazy(() =>
 const Florist = React.lazy(() =>
   import("./pages/Florist").then(({ Florist }) => ({
     default: Florist,
+  }))
+);
+
+const MyCollection = React.lazy(() =>
+  import("./pages/MyCollection").then(({ MyCollection }) => ({
+    default: MyCollection,
   }))
 );
 
@@ -52,6 +69,11 @@ export const Routes = () => {
                 <UserViewLayout showHeader showBottomNav>
                   <Route path="/user/myniwa" component={MyNiwa} exact />
                   <Route
+                    path="/user/myniwa/:gardenId/settings"
+                    component={Settings}
+                    exact
+                  />
+                  <Route
                     path="/user/dailyGardening/:gardenId"
                     component={DailyGardening}
                     exact
@@ -62,6 +84,11 @@ export const Routes = () => {
                     exact
                   />
                   <Route path="/user/store" component={Florist} exact />
+                  <Route
+                    path="/user/myCollection"
+                    component={MyCollection}
+                    exact
+                  />
                 </UserViewLayout>
               </Route>
               <Route path="/about" component={About} exact />

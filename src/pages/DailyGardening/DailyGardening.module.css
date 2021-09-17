@@ -1,0 +1,61 @@
+.gardenViewContainer {
+  margin-top: 10px;
+  width: 100%;
+}
+
+.rulesContainer {
+  margin: 5% 0;
+  background-color: #fff;
+  border-radius: 20px;
+}
+
+.heading {
+  height: 40px;
+}
+
+.subtitle {
+  margin: 0.125rem 0;
+}
+
+.switchWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.switchWrapper > p {
+  margin: 0;
+}
+
+.wateringAnimationContainer {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.wateringAnimation {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.taskButtonContainer {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.ruleDescription {
+  text-align: center;
+}
+
+.returnButtonWrapper {
+  text-align: center;
+  margin-top: 25px;
+}
+
+@media screen and (max-device-width: 600px) {
+  .settingsButton {
+    margin-top: 6px;
+  }
+}
