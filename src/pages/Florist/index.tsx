@@ -2,7 +2,7 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Redirect } from "react-router-dom";
 import { Head } from "../../components/Head";
 import { LoadingWrapper } from "../../components/LoadingWrapper";
@@ -11,6 +11,7 @@ import { getFlowers } from "../../helpers/api/flowers/getFlowers";
 import { Flower } from "../../models/flower.model";
 import { useUserState } from "../../store/user/useUserState";
 import { useApi } from "../../utils/api/useApi";
+import AudioAsset from "./assets/you-suffer.mp3";
 import styles from "./Florist.module.css";
 import { AlertDialog } from "./component/dialog";
 
@@ -119,6 +120,7 @@ export const Florist = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [userId]
   );
+  const AudioRef = useRef<HTMLAudioElement>(null);
 
   const cancelHandler = () => {
     setDialogStatus(false);
@@ -126,6 +128,8 @@ export const Florist = () => {
 
   useEffect(() => {
     if (buyFlowerAPIState.status === "succeeded" && lastBought) {
+      const audio = new Audio(AudioAsset);
+      audio.play();
       setBuyFlowerError(false);
 
       setUserData((data) => {
@@ -182,6 +186,9 @@ export const Florist = () => {
           justifyContent="center"
           className={classes.header}
         >
+          <audio ref={AudioRef}>
+            <source src={AudioAsset}></source>
+          </audio>
           <Grid container justifyContent="flex-start">
             <h1 className={classes.title}>Florist</h1>
           </Grid>
