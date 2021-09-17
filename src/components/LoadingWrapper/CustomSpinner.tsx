@@ -7,17 +7,8 @@ export const CustomSpinner = () => {
     <motion.div
       animate={{
         rotate: 360,
-        backgroundColor: [
-          "#3b727080",
-          "#6ac69780",
-          "#87D1AB80",
-          "#edf4f580",
-          "#87D1AB80",
-          "#6ac69780",
-          "#3b727080",
-        ],
       }}
-      transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+      transition={{ repeat: Infinity, duration: 1.1, ease: "linear" }}
       className={
         styles.spinnerContainer
       }
