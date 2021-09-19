@@ -13,7 +13,6 @@ import ClearIcon from "@material-ui/icons/Clear";
 import { ApexOptions } from "apexcharts";
 import {
   addDays,
-  // getMonth,
   endOfWeek,
   format,
   formatISO,
