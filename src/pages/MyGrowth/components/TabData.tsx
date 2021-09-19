@@ -1,29 +1,38 @@
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@material-ui/core"
-import { useMemo, useEffect } from "react";
-import { getGardenByGardenIdWithDates } from "../../../helpers/api/gardens/getGardenByGardenIdWithDates";
-import { CompletedTask } from "../../../models/completedTask.model";
-import { useApi } from "../../../utils/api/useApi";
+import {
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@material-ui/core";
+import CheckIcon from "@material-ui/icons/Check";
+import ClearIcon from "@material-ui/icons/Clear";
+import { ApexOptions } from "apexcharts";
 import {
   addDays,
+  // getMonth,
+  endOfWeek,
+  format,
   formatISO,
   getDay,
   isBefore,
   isSameDay,
+  isSameMonth,
+  startOfMonth,
   startOfWeek,
   sub,
-  // getMonth,
-  endOfWeek,
-  startOfMonth,
-  format,
-  isSameMonth,
 } from "date-fns";
-import { Rule } from "../../../models/rule.model";
+import { useEffect, useMemo } from "react";
 import Chart from "react-apexcharts";
-import { ApexOptions } from "apexcharts";
-import styles from "../MyGrowth.module.css";
 import { LoadingWrapper } from "../../../components/LoadingWrapper";
-import CheckIcon from '@material-ui/icons/Check';
-import ClearIcon from '@material-ui/icons/Clear';
+import { getGardenByGardenIdWithDates } from "../../../helpers/api/gardens/getGardenByGardenIdWithDates";
+import { CompletedTask } from "../../../models/completedTask.model";
+import { Rule } from "../../../models/rule.model";
+import { useApi } from "../../../utils/api/useApi";
+import styles from "../MyGrowth.module.css";
 
 interface ICompletedTasksByRuleId {
   [ruleId: string]: Array<CompletedTask>;
@@ -33,14 +42,12 @@ interface TabDataProps {
   gardenId: string | undefined;
 }
 
-export const TabData: React.FC<TabDataProps> = ({
-  gardenId,
-}) => {
+export const TabData: React.FC<TabDataProps> = ({ gardenId }) => {
   // TODO: fix this to state if we want to change state and end dates
   const startDate = sub(new Date(), { weeks: 4 });
   const tableStartDate = sub(new Date(), { days: 6 });
   const endDate = new Date();
-  
+
   const [gardenProgressDataApi, getGardenProgressData] = useApi(
     getGardenByGardenIdWithDates
   );
@@ -55,7 +62,7 @@ export const TabData: React.FC<TabDataProps> = ({
     [gardenProgressDataApi]
   );
 
-    const tableHeader = useMemo(() => {
+  const tableHeader = useMemo(() => {
     const labels: Array<string> = [];
     let date = tableStartDate;
     while (isBefore(date, endDate) || isSameDay(date, endDate)) {
@@ -70,16 +77,18 @@ export const TabData: React.FC<TabDataProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gardenProgressDataApi]);
 
-    const dataRows = useMemo(() => {
-    const completedTasksByRuleId: ICompletedTasksByRuleId =
-      rules.reduce((ruleMapping: ICompletedTasksByRuleId, rule: Rule) => {
+  const dataRows = useMemo(() => {
+    const completedTasksByRuleId: ICompletedTasksByRuleId = rules.reduce(
+      (ruleMapping: ICompletedTasksByRuleId, rule: Rule) => {
         const completedTasksPerRule: Array<CompletedTask> =
           completedTasks.filter(
             (completedTask: CompletedTask) => completedTask.ruleId === rule._id
           );
         ruleMapping[rule._id || "emptyRuleId"] = completedTasksPerRule;
         return ruleMapping;
-      }, {});
+      },
+      {}
+    );
 
     const dataRows = rules.map((rule: Rule) => {
       const row: {
@@ -162,7 +171,6 @@ export const TabData: React.FC<TabDataProps> = ({
 
   const heatMapOptions: ApexOptions = useMemo(() => {
     let date = startOfWeek(startDate);
-    // const startMonth = getMonth(date);
     const categories: Array<string> = [];
     if (isSameDay(date, startOfMonth(date))) {
       categories.push(format(date, "LLL"));
@@ -170,21 +178,21 @@ export const TabData: React.FC<TabDataProps> = ({
     }
     while (isBefore(date, endDate) || isSameDay(date, endDate)) {
       const endOfWeekDay = endOfWeek(date);
-      if (isSameMonth(date, endOfWeekDay)) { 
+      if (isSameMonth(date, endOfWeekDay)) {
         categories.push("");
       } else {
-        categories.push(format(endOfWeekDay, "LLL"))
+        categories.push(format(endOfWeekDay, "LLL"));
       }
       date = addDays(date, 7);
     }
-    const options: ApexOptions =   {
+    const options: ApexOptions = {
       chart: {
         height: 350,
         type: "heatmap",
-        foreColor: "#172F4A"
+        foreColor: "#172F4A",
       },
       dataLabels: {
-        enabled: true,
+        enabled: false,
       },
       xaxis: {
         type: "category",
@@ -192,8 +200,8 @@ export const TabData: React.FC<TabDataProps> = ({
       },
       plotOptions: {
         heatmap: {
-          radius: 4
-        }
+          radius: 4,
+        },
       },
       theme: {
         monochrome: {
@@ -204,7 +212,7 @@ export const TabData: React.FC<TabDataProps> = ({
     };
     return options;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gardenProgressDataApi])
+  }, [gardenProgressDataApi]);
 
   useEffect(() => {
     if (gardenId) {
@@ -221,11 +229,13 @@ export const TabData: React.FC<TabDataProps> = ({
 
   return (
     <>
-    <LoadingWrapper isLoading={gardenProgressDataApi.status === "loading"}>
-      <Grid container>
-        <Typography className={styles.gardenDescription} variant="h5">This week's Seeds:</Typography>
-      </Grid>
-      <Grid className={ styles.tableContainer }>
+      <LoadingWrapper isLoading={gardenProgressDataApi.status === "loading"}>
+        <Grid container>
+          <Typography className={styles.gardenDescription} variant="h5">
+            This week's Seeds:
+          </Typography>
+        </Grid>
+        <Grid className={styles.tableContainer}>
           <TableContainer>
             <Table>
               <TableHead>
@@ -238,29 +248,38 @@ export const TabData: React.FC<TabDataProps> = ({
               </TableHead>
               <TableBody>
                 {dataRows.map((row) => (
-                  <TableRow key={row.ruleId}> 
+                  <TableRow key={row.ruleId}>
                     <TableCell>{row.ruleName}</TableCell>
                     {tableHeader.map((header) => (
-                      <TableCell key={row.ruleId + "_"+ header} className={row[header] ? styles.complete : styles.incomplete}>{row[header] ? <CheckIcon /> : <ClearIcon />}</TableCell>
+                      <TableCell
+                        key={row.ruleId + "_" + header}
+                        className={
+                          row[header] ? styles.complete : styles.incomplete
+                        }
+                      >
+                        {row[header] ? <CheckIcon /> : <ClearIcon />}
+                      </TableCell>
                     ))}
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
-      </Grid>
-      <Grid container>
-        <Typography className={styles.heatMapDescription} variant="h5">Last 4 weeks:</Typography>
-      </Grid>
-      <Grid className={ styles.heatMapContainer }>
-        <Chart
-          options={heatMapOptions}
-          series={series}
-          type="heatmap"
-          height={400}
-        />
-      </Grid>
+        </Grid>
+        <Grid container>
+          <Typography className={styles.heatMapDescription} variant="h5">
+            Last 4 weeks:
+          </Typography>
+        </Grid>
+        <Grid className={styles.heatMapContainer}>
+          <Chart
+            options={heatMapOptions}
+            series={series}
+            type="heatmap"
+            height={400}
+          />
+        </Grid>
       </LoadingWrapper>
     </>
-  )
-}
+  );
+};
