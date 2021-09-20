@@ -277,7 +277,8 @@ export const Florist = () => {
                         }
                       >
                         Buy:{" "}
-                        <img src={CoinAsset} alt="" className={styles.coin} />{" "}
+                        <img src={CoinAsset} alt="" className={styles.coin} />
+                        {"  "}
                         {flower.price}
                       </Button>
                     </LoadingWrapper>
