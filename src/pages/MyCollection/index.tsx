@@ -3,13 +3,21 @@ import "./MyCollection.css";
 import { useEffect, useMemo } from "react";
 import { useApi } from "../../utils/api/useApi";
 import { getFlowers } from "../../helpers/api/flowers/getFlowers";
+import { useUserState } from "../../store/user/useUserState";
 
 export const MyCollection = () => {
   const [flowersAPIState, getAllFlowers] = useApi(getFlowers);
 
+  const { userData, setUserData } = useUserState();
+
   const allFlowers = useMemo(
     () => flowersAPIState.response ?? [],
     [flowersAPIState]
+  );
+
+  const boughtFlowers = useMemo(
+    () => (userData.isLoggedIn && userData.flowerCollections) || [],
+    [userData]
   );
 
   useEffect(() => {
@@ -53,16 +61,18 @@ export const MyCollection = () => {
           </div>
 
           {allFlowers.map((flower, index) => {
-            return (
-              flower.isActive && (
+            const isBought = boughtFlowers.includes(flower._id);
+            return isBought ? (
+              <div key={flower._id}>
                 <img
                   className="flower-animation flower-image"
                   src={flower.imageURL}
-                  key={flower._id}
                   alt={flower.name}
                   style={{ left: "" + (20 + index * 90) + "px" }}
                 />
-              )
+              </div>
+            ) : (
+              <div key={flower._id}></div>
             );
           })}
           <motion.div
