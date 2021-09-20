@@ -22,6 +22,7 @@ const useStyles = makeStyles(() =>
     appBar: {
       top: "auto",
       bottom: 0,
+      left: 0,
     },
     root: {
       padding: "1%",
@@ -43,7 +44,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   const classes = useStyles();
   const navClasses = useNavStyles();
   return (
-    <AppBar position="static" className={classes.appBar}>
+    <AppBar position="absolute" className={classes.appBar}>
       <BottomNavigation
         value={currentPage}
         onChange={handlePageChange}
