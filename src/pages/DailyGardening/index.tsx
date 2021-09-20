@@ -77,22 +77,18 @@ export const DailyGardening = () => {
     [gardenDataApi]
   );
 
-  const completedTasks = useMemo(() => {
-    return currentCompletedTasks;
-  }, [currentCompletedTasks]);
-
   const isRuleCompleted = useCallback(
     (ruleId?: string) => {
-      if (!completedTasks || !ruleId) return false;
+      if (!currentCompletedTasks || !ruleId) return false;
 
-      return completedTasks.some((completedTask) => {
+      return currentCompletedTasks.some((completedTask) => {
         return (
           isSameDay(new Date(), new Date(completedTask.date)) &&
           completedTask.ruleId === ruleId
         );
       });
     },
-    [completedTasks]
+    [currentCompletedTasks]
   );
 
   useEffect(() => {
@@ -141,7 +137,7 @@ export const DailyGardening = () => {
         setLastClicked(rule._id);
       }
 
-      const taskToDelete: CompletedTask | undefined = completedTasks.find(
+      const taskToDelete = currentCompletedTasks.find(
         (completedTask) =>
           completedTask.ruleId === rule._id &&
           isSameDay(new Date(), new Date(completedTask.date))
@@ -152,7 +148,7 @@ export const DailyGardening = () => {
         await deleteTask(taskToDelete._id, userId);
       }
     },
-    [completedTasks, deleteTask, userId]
+    [currentCompletedTasks, deleteTask, userId]
   );
 
   const onTaskClicked = useCallback(
