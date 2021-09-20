@@ -1,10 +1,11 @@
-import { Checkbox, FormControlLabel, Theme } from "@material-ui/core";
+import { Theme } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
+import Checkbox from "@material-ui/core/Checkbox";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
-// import CloseIcon from "@material-ui/icons/Close";
-// import DoneIcon from "@material-ui/icons/Done";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { formatISO, isSameDay } from "date-fns";
 import { motion } from "framer-motion";
@@ -15,7 +16,6 @@ import { Head } from "../../components/Head";
 import { LoadingWrapper } from "../../components/LoadingWrapper";
 import { Section } from "../../components/Section";
 import { SectionTitle } from "../../components/SectionTitle";
-// TODO: Revisit when delete api is implemented
 import { deleteCompletedTask } from "../../helpers/api/completedTasks/deleteCompletedTask";
 import {
   CompletedTaskToSend,
@@ -50,13 +50,9 @@ export const DailyGardening = () => {
   const { userData, setUserData } = useUserState();
   const { gardenId } = useParams<{ gardenId: string }>();
   const [showDescriptions, setShowDescriptions] = useState(false);
-  // TODO: Please uncomment below line for delete!
-  // const [completedTasks, setCompletedTasks] = useState(Array<CompletedTask>());
-
   const { setCurrentPage } = usePageState();
   const [gardenDataApi, getGardenData] = useApi(getGardenByGardenId);
   const [completedTaskApi, sendCompletedTaskData] = useApi(sendCompletedTask);
-  // TODO: Revisit when delete api is implemented
   const [deletedTaskApi, deleteTask] = useApi(deleteCompletedTask);
 
   const [lastClicked, setLastClicked] = useState("");
@@ -201,6 +197,13 @@ export const DailyGardening = () => {
   }, [deletedTaskApi]);
 
   const classes = useStyles();
+
+  const isTaskHandlerApiLoading = useMemo(
+    () =>
+      completedTaskApi.status === "loading" ||
+      deletedTaskApi.status === "loading",
+    [completedTaskApi.status, deletedTaskApi.status]
+  );
   return (
     <>
       <Head title="Daily Gardening" />
@@ -256,56 +259,30 @@ export const DailyGardening = () => {
                 <div className={styles.taskButtonContainer}>
                   {rules.map((rule) => {
                     return (
-                      <LoadingWrapper
-                        key={rule._id}
-                        isLoading={
-                          lastClicked === rule._id &&
-                          (completedTaskApi.status === "loading" ||
-                            deletedTaskApi.status === "loading")
-                        }
-                      >
-                        {/* <Button
-                          // startIcon={
-                          //   !isRuleCompleted(rule._id) && <CloseIcon />
-                          // }
-                          // endIcon={isRuleCompleted(rule._id) && <DoneIcon />}
-                          className={classes.ruleButton}
-                          size="large"
-                          variant="contained"
-                          color={handleChipColor(isRuleCompleted(rule._id))}
-                          onClick={() => {
-                            !isRuleCompleted(rule._id) &&
-                              completeTaskHandler(rule);
-                          }}
-                          disabled={completedTaskApi.status === "loading"}
-                          // TODO: Implement UNDO
-                          // onDelete={() => handleDelete(rule)}
-                          // deleteIcon={<UndoIcon />}
-                        >
-                       
-                          {rule.name}
-                        </Button> */}
-                        <FormControlLabel
-                          disabled={
-                            completedTaskApi.status === "loading" ||
-                            deletedTaskApi.status === "loading"
-                          }
-                          // onClick={() => {
-                          //   !isRuleCompleted(rule._id) &&
-                          //     completeTaskHandler(rule);
-                          // }}
-                          control={
-                            <Checkbox
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onTaskClicked(rule, isRuleCompleted(rule._id));
-                              }}
-                              color="primary"
-                              checked={isRuleCompleted(rule._id)}
-                            />
-                          }
-                          label={rule.name}
-                        />
+                      <div key={rule._id}>
+                        <div className={styles.taskCheckboxWrapper}>
+                          <FormControlLabel
+                            disabled={isTaskHandlerApiLoading}
+                            control={
+                              <Checkbox
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onTaskClicked(
+                                    rule,
+                                    isRuleCompleted(rule._id)
+                                  );
+                                }}
+                                color="primary"
+                                checked={isRuleCompleted(rule._id)}
+                              />
+                            }
+                            label={rule.name}
+                          />
+                          {lastClicked === rule._id &&
+                            isTaskHandlerApiLoading && (
+                              <CircularProgress size={24} />
+                            )}
+                        </div>
                         {rule.description && showDescriptions && (
                           <Card className={classes.taskDescription}>
                             <p className={styles.ruleDescription}>
@@ -313,7 +290,7 @@ export const DailyGardening = () => {
                             </p>
                           </Card>
                         )}
-                      </LoadingWrapper>
+                      </div>
                     );
                   })}
                 </div>
