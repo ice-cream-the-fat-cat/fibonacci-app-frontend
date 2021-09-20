@@ -12,6 +12,7 @@ import { Flower } from "../../models/flower.model";
 import { useUserState } from "../../store/user/useUserState";
 import { useApi } from "../../utils/api/useApi";
 import { AlertDialog } from "./component/dialog";
+import CoinAsset from "./assets/coin.png";
 import styles from "./Florist.module.css";
 
 // TODO: Refactor page layout
@@ -275,7 +276,9 @@ export const Florist = () => {
                           !userData.balance || flower.price > userData.balance
                         }
                       >
-                        Buy: {flower.price}
+                        Buy:{" "}
+                        <img src={CoinAsset} alt="" className={styles.coin} />{" "}
+                        {flower.price}
                       </Button>
                     </LoadingWrapper>
                   </Grid>
