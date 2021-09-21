@@ -24,7 +24,8 @@
 }
 
 .flowerPrice {
-  margin-top: 0.125rem;
+  margin: 0.3rem 0 0.3rem 0;
+  line-height: 1.5rem;
 }
 
 button:disabled {
