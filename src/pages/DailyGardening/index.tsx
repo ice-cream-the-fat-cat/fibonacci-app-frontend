@@ -2,7 +2,7 @@ import { Theme } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import Checkbox from "@material-ui/core/Checkbox";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import { CustomSpinner } from "../../components/LoadingWrapper/CustomSpinner";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
@@ -280,7 +280,7 @@ export const DailyGardening = () => {
                           />
                           {lastClicked === rule._id &&
                             isTaskHandlerApiLoading && (
-                              <CircularProgress size={24} />
+                              <CustomSpinner isSmall />
                             )}
                         </div>
                         {rule.description && showDescriptions && (

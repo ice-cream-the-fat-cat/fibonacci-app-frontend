@@ -5,6 +5,11 @@
   align-items: center;
 }
 
+.spinnerSmall {
+  width: 45px;
+  height: 45px;
+}
+
 .spinner {
   width: 100%;
 }
