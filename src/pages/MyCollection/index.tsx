@@ -8,7 +8,7 @@ import { useUserState } from "../../store/user/useUserState";
 export const MyCollection = () => {
   const [flowersAPIState, getAllFlowers] = useApi(getFlowers);
 
-  const { userData, setUserData } = useUserState();
+  const { userData } = useUserState();
 
   const allFlowers = useMemo(
     () => flowersAPIState.response ?? [],
