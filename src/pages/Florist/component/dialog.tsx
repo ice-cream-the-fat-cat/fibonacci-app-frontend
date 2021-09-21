@@ -2,6 +2,7 @@ import React from "react";
 import {
   Button,
   createStyles,
+  Grid,
   makeStyles,
   Theme,
   Dialog,
@@ -13,6 +14,7 @@ import {
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import { withStyles } from "@material-ui/core/styles";
 import { Flower } from "../../../models/flower.model";
+import CoinAsset from "../assets/coin.png";
 import styles from "../Florist.module.css";
 
 interface AlertDialogProps {
@@ -78,7 +80,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title" className={classes.confirmText}>
-        Would you like to buy it?
+        Are you sure you want to buy this?
       </DialogTitle>
       <DialogContent className={classes.dialog}>
         <img
@@ -86,16 +88,19 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
           alt={"secret flower pic"}
           className={styles.notBoughtPicDialog}
         />
-        <DialogContentText className={classes.priceText}>
-          price : {selectFlower.price}
-        </DialogContentText>
+        <Grid container justifyContent="center">
+          <img src={CoinAsset} alt="" className={styles.coin} />
+          <DialogContentText className={classes.priceText}>
+            {selectFlower.price}
+          </DialogContentText>
+        </Grid>
       </DialogContent>
       <DialogActions className={classes.confirmButton}>
         <Button onClick={handleClose} color="primary">
-          Cancel
+          No, thank you
         </Button>
         <Button variant="contained" onClick={buy} color="primary" autoFocus>
-          Buy
+          Yes, Please!
         </Button>
       </DialogActions>
     </Dialog>

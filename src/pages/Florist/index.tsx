@@ -11,19 +11,22 @@ import { getFlowers } from "../../helpers/api/flowers/getFlowers";
 import { Flower } from "../../models/flower.model";
 import { useUserState } from "../../store/user/useUserState";
 import { useApi } from "../../utils/api/useApi";
-import styles from "./Florist.module.css";
 import { AlertDialog } from "./component/dialog";
+import CoinAsset from "./assets/coin.png";
+import styles from "./Florist.module.css";
+
+// TODO: Refactor page layout
+// TODO: Add coins to price
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
       width: "90%",
-      marginLeft: "2.5%",
-      padding: "0 5%",
+      maxWidth: "600px",
+      margin: "0 auto",
+      height: "auto !important",
     },
     header: {
-      margin: "2%",
-      marginLeft: "5%",
       width: "100%",
     },
     title: {
@@ -75,6 +78,8 @@ const useStyles = makeStyles((theme: Theme) =>
     buyButton: {
       marginBottom: "0.125rem",
       width: "100%",
+      fontSize: "1.2rem",
+      fontWeight: "bold",
     },
     errorMsg: {
       backgroundColor: theme.palette.error.light,
@@ -233,6 +238,7 @@ export const Florist = () => {
                       src={flower.imageURL}
                       alt={`${flower.name} pic`}
                       className={styles.boughtPic}
+                      draggable="false"
                     />
                   </Grid>
                 ) : (
@@ -260,6 +266,7 @@ export const Florist = () => {
                         src={flower.imageURL}
                         alt={"secret flower pic"}
                         className={styles.notBoughtPic}
+                        draggable="false"
                       />
                       <Button
                         variant="contained"
@@ -273,7 +280,8 @@ export const Florist = () => {
                           !userData.balance || flower.price > userData.balance
                         }
                       >
-                        Buy: {flower.price}
+                        <img src={CoinAsset} alt="" className={styles.coin} />
+                        {flower.price}
                       </Button>
                     </LoadingWrapper>
                   </Grid>

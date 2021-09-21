@@ -53,7 +53,7 @@ export const Header = () => {
 
   return (
     <AppBar
-      position="static"
+      position="fixed"
       className={styles.header}
       classes={{ root: classes.root }}
     >
