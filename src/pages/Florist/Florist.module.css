@@ -8,6 +8,7 @@
   height: 80%;
   -webkit-filter: hue-rotate(0deg) saturate(0%) brightness(0%);
   filter: hue-rotate(0deg) saturate(0%) brightness(0%);
+  margin-bottom: 1rem;
 }
 
 .notBoughtPicDialog {
@@ -20,4 +21,12 @@
 .coin {
   max-height: 20px;
   max-width: 20px;
+}
+
+.flowerPrice {
+  margin-top: 0.125rem;
+}
+
+button:disabled {
+  filter: hue-rotate(0deg) saturate(0%) brightness(100%);
 }

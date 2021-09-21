@@ -77,6 +77,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     buyButton: {
       marginBottom: "0.125rem",
+      alignItems: "center",
       width: "100%",
       fontSize: "1rem",
       fontWeight: "bold",
@@ -281,7 +282,7 @@ export const Florist = () => {
                         }
                       >
                         <img src={CoinAsset} alt="" className={styles.coin} />
-                        {flower.price}
+                        <span className="flowerPrice">{flower.price}</span>
                       </Button>
                     </LoadingWrapper>
                   </Grid>
