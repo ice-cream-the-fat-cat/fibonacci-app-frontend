@@ -60,7 +60,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           icon={<EmojiNatureIcon />}
         ></BottomNavigationAction>
         <BottomNavigationAction
-          label="My Collection"
+          label="My Niwa"
           showLabel={true}
           value="/user/myCollection"
           icon={<LocalFloristIcon />}

@@ -83,7 +83,7 @@ export const MyNiwa = () => {
         exit={{ opacity: 0 }}
       >
         <Section>
-          <SectionTitle title="My Niwa">
+          <SectionTitle title="My Flower Beds">
             <Tooltip arrow classes={tooltipStyles} title="Add Flower Bed">
               <IconButton
                 className={classes.createGarden}

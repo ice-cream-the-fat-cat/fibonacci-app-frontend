@@ -1,10 +1,11 @@
 import { Theme } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
+import Checkbox from "@material-ui/core/Checkbox";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
 import Switch from "@material-ui/core/Switch";
-import CloseIcon from "@material-ui/icons/Close";
-import DoneIcon from "@material-ui/icons/Done";
 import { createStyles, makeStyles } from "@material-ui/styles";
 import { formatISO, isSameDay } from "date-fns";
 import { motion } from "framer-motion";
@@ -15,8 +16,7 @@ import { Head } from "../../components/Head";
 import { LoadingWrapper } from "../../components/LoadingWrapper";
 import { Section } from "../../components/Section";
 import { SectionTitle } from "../../components/SectionTitle";
-// TODO: Revisit when delete api is implemented
-// import { deleteCompletedTask } from "../../helpers/api/completedTasks/deleteCompletedTask";
+import { deleteCompletedTask } from "../../helpers/api/completedTasks/deleteCompletedTask";
 import {
   CompletedTaskToSend,
   sendCompletedTask,
@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme: Theme) =>
     returnButton: {
       backgroundColor: theme.palette.text.primary,
       color: theme.palette.background.default,
+      '&:hover': {
+        backgroundColor: "#172F4ABB",
+        color: theme.palette.background.paper,
+      }
     },
   })
 );
@@ -50,14 +54,10 @@ export const DailyGardening = () => {
   const { userData, setUserData } = useUserState();
   const { gardenId } = useParams<{ gardenId: string }>();
   const [showDescriptions, setShowDescriptions] = useState(false);
-  // TODO: Please uncomment below line for delete!
-  // const [completedTasks, setCompletedTasks] = useState(Array<CompletedTask>());
-
   const { setCurrentPage } = usePageState();
   const [gardenDataApi, getGardenData] = useApi(getGardenByGardenId);
   const [completedTaskApi, sendCompletedTaskData] = useApi(sendCompletedTask);
-  // TODO: Revisit when delete api is implemented
-  // const [deletedTaskApi, deleteTask] = useApi(deleteCompletedTask);
+  const [deletedTaskApi, deleteTask] = useApi(deleteCompletedTask);
 
   const [lastClicked, setLastClicked] = useState("");
 
@@ -69,35 +69,30 @@ export const DailyGardening = () => {
     CompletedTask[]
   >([]);
 
-  const garden = useMemo(() => {
-    if (gardenDataApi.response?.completedTasks) {
-      setCurrentCompletedTasks(gardenDataApi.response?.completedTasks);
+  useEffect(() => {
+    if (gardenDataApi.status === "succeeded") {
+      gardenDataApi.response.completedTasks &&
+        setCurrentCompletedTasks(gardenDataApi.response.completedTasks);
     }
-    return gardenDataApi.response?.garden;
   }, [gardenDataApi]);
-  console.log("TODO: Use garden data:", { garden });
 
   const rules = useMemo(
     () => gardenDataApi.response?.rules ?? [],
     [gardenDataApi]
   );
 
-  const completedTasks = useMemo(() => {
-    return currentCompletedTasks;
-  }, [currentCompletedTasks]);
-
   const isRuleCompleted = useCallback(
     (ruleId?: string) => {
-      if (!completedTasks || !ruleId) return false;
+      if (!currentCompletedTasks || !ruleId) return false;
 
-      return completedTasks.some((completedTask) => {
+      return currentCompletedTasks.some((completedTask) => {
         return (
           isSameDay(new Date(), new Date(completedTask.date)) &&
           completedTask.ruleId === ruleId
         );
       });
     },
-    [completedTasks]
+    [currentCompletedTasks]
   );
 
   useEffect(() => {
@@ -140,8 +135,40 @@ export const DailyGardening = () => {
     [userData]
   );
 
+  const removeCompletedTask = useCallback(
+    async (rule: Rule) => {
+      if (rule._id) {
+        setLastClicked(rule._id);
+      }
+
+      const taskToDelete = currentCompletedTasks.find(
+        (completedTask) =>
+          completedTask.ruleId === rule._id &&
+          isSameDay(new Date(), new Date(completedTask.date))
+      );
+
+      if (taskToDelete && userId) {
+        // will return updated coins for users
+        await deleteTask(taskToDelete._id, userId);
+      }
+    },
+    [currentCompletedTasks, deleteTask, userId]
+  );
+
+  const onTaskClicked = useCallback(
+    async (rule: Rule, isRuleCompleted: boolean) => {
+      if (!isRuleCompleted) {
+        completeTaskHandler(rule);
+      } else {
+        removeCompletedTask(rule);
+      }
+    },
+    [completeTaskHandler, removeCompletedTask]
+  );
+
   useEffect(() => {
     if (completedTaskApi.status === "succeeded") {
+      // MEMO: Return also deleted task id and not just user account data
       const { balance: newCoinBalance } = completedTaskApi.response.user;
       setCurrentCompletedTasks((v) => [
         ...v,
@@ -154,29 +181,29 @@ export const DailyGardening = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [completedTaskApi]);
 
-  // TODO: Revisit when delete api is implemented.
-  // const handleDelete = useCallback(
-  //   async (rule: Rule) => {
-  //     const deleteCompletedTask: CompletedTask | undefined =
-  //       completedTasks.find(
-  //         (completedTask: CompletedTask) =>
-  //           completedTask.ruleId === rule._id &&
-  //           isSameDay(new Date(), new Date(completedTask.date))
-  //       );
+  useEffect(() => {
+    if (deletedTaskApi.status === "succeeded") {
+      const { balance: newCoinBalance } = deletedTaskApi.response;
 
-  //     if (deleteCompletedTask && userId) {
-  //       // will return updated coins for users
-  //       await deleteTask(deleteCompletedTask._id, userId);
-  //     }
-  //   },
-  //   [completedTasks, deleteTask, userId]
-  // );
+      setCurrentCompletedTasks((tasks) =>
+        tasks.filter((completedTask) => completedTask.ruleId !== lastClicked)
+      );
 
-  const handleChipColor = (bool: boolean) => {
-    return bool ? "primary" : "secondary";
-  };
+      setUserData((data) => {
+        return { ...data, balance: newCoinBalance };
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deletedTaskApi]);
 
   const classes = useStyles();
+
+  const isTaskHandlerApiLoading = useMemo(
+    () =>
+      completedTaskApi.status === "loading" ||
+      deletedTaskApi.status === "loading",
+    [completedTaskApi.status, deletedTaskApi.status]
+  );
   return (
     <>
       <Head title="Daily Gardening" />
@@ -232,33 +259,30 @@ export const DailyGardening = () => {
                 <div className={styles.taskButtonContainer}>
                   {rules.map((rule) => {
                     return (
-                      <LoadingWrapper
-                        key={rule._id}
-                        isLoading={
-                          lastClicked === rule._id &&
-                          completedTaskApi.status === "loading"
-                        }
-                      >
-                        <Button
-                          startIcon={
-                            !isRuleCompleted(rule._id) && <CloseIcon />
-                          }
-                          endIcon={isRuleCompleted(rule._id) && <DoneIcon />}
-                          className={classes.ruleButton}
-                          size="large"
-                          variant="contained"
-                          color={handleChipColor(isRuleCompleted(rule._id))}
-                          onClick={() => {
-                            !isRuleCompleted(rule._id) &&
-                              completeTaskHandler(rule);
-                          }}
-                          disabled={completedTaskApi.status === "loading"}
-                          // TODO: Implement UNDO
-                          // onDelete={() => handleDelete(rule)}
-                          // deleteIcon={<UndoIcon />}
-                        >
-                          {rule.name}
-                        </Button>
+                      <div key={rule._id}>
+                        <div className={styles.taskCheckboxWrapper}>
+                          <FormControlLabel
+                            disabled={isTaskHandlerApiLoading}
+                            control={
+                              <Checkbox
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onTaskClicked(
+                                    rule,
+                                    isRuleCompleted(rule._id)
+                                  );
+                                }}
+                                color="primary"
+                                checked={isRuleCompleted(rule._id)}
+                              />
+                            }
+                            label={rule.name}
+                          />
+                          {lastClicked === rule._id &&
+                            isTaskHandlerApiLoading && (
+                              <CircularProgress size={24} />
+                            )}
+                        </div>
                         {rule.description && showDescriptions && (
                           <Card className={classes.taskDescription}>
                             <p className={styles.ruleDescription}>
@@ -266,7 +290,7 @@ export const DailyGardening = () => {
                             </p>
                           </Card>
                         )}
-                      </LoadingWrapper>
+                      </div>
                     );
                   })}
                 </div>
