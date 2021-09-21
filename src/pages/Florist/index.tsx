@@ -12,6 +12,7 @@ import { Flower } from "../../models/flower.model";
 import { useUserState } from "../../store/user/useUserState";
 import { useApi } from "../../utils/api/useApi";
 import { AlertDialog } from "./component/dialog";
+import CoinAsset from "./assets/coin.png";
 import styles from "./Florist.module.css";
 
 // TODO: Refactor page layout
@@ -77,6 +78,8 @@ const useStyles = makeStyles((theme: Theme) =>
     buyButton: {
       marginBottom: "0.125rem",
       width: "100%",
+      fontSize: "1.2rem",
+      fontWeight: "bold",
     },
     errorMsg: {
       backgroundColor: theme.palette.error.light,
@@ -277,7 +280,8 @@ export const Florist = () => {
                           !userData.balance || flower.price > userData.balance
                         }
                       >
-                        Buy: {flower.price}
+                        <img src={CoinAsset} alt="" className={styles.coin} />
+                        {flower.price}
                       </Button>
                     </LoadingWrapper>
                   </Grid>

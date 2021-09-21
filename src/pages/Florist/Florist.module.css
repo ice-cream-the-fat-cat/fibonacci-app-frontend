@@ -16,3 +16,8 @@
   -webkit-filter: hue-rotate(0deg) saturate(0%) brightness(0%);
   filter: hue-rotate(0deg) saturate(0%) brightness(0%);
 }
+
+.coin {
+  width: 15%;
+  height: 15%;
+}
