@@ -78,6 +78,8 @@ const useStyles = makeStyles((theme: Theme) =>
     buyButton: {
       marginBottom: "0.125rem",
       width: "100%",
+      fontSize: "1.2rem",
+      fontWeight: "bold",
     },
     errorMsg: {
       backgroundColor: theme.palette.error.light,
@@ -278,9 +280,7 @@ export const Florist = () => {
                           !userData.balance || flower.price > userData.balance
                         }
                       >
-                        Buy:{" "}
                         <img src={CoinAsset} alt="" className={styles.coin} />
-                        {"  "}
                         {flower.price}
                       </Button>
                     </LoadingWrapper>
