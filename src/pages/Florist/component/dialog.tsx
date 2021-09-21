@@ -80,7 +80,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title" className={classes.confirmText}>
-        Would you like to buy it?
+        Are you sure you want to buy this?
       </DialogTitle>
       <DialogContent className={classes.dialog}>
         <img
@@ -97,10 +97,10 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
       </DialogContent>
       <DialogActions className={classes.confirmButton}>
         <Button onClick={handleClose} color="primary">
-          Cancel
+          No, thank you
         </Button>
         <Button variant="contained" onClick={buy} color="primary" autoFocus>
-          Buy
+          Yes, Please!
         </Button>
       </DialogActions>
     </Dialog>
