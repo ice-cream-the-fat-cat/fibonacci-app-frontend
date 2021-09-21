@@ -54,6 +54,16 @@
   margin-top: 25px;
 }
 
+.taskCheckboxWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.taskCheckboxWrapper > label > span + span {
+  font-size: 1.4rem;
+}
+
 @media screen and (max-device-width: 600px) {
   .settingsButton {
     margin-top: 6px;

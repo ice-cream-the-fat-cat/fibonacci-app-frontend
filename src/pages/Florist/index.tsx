@@ -236,6 +236,7 @@ export const Florist = () => {
                       src={flower.imageURL}
                       alt={`${flower.name} pic`}
                       className={styles.boughtPic}
+                      draggable="false"
                     />
                   </Grid>
                 ) : (
@@ -263,6 +264,7 @@ export const Florist = () => {
                         src={flower.imageURL}
                         alt={"secret flower pic"}
                         className={styles.notBoughtPic}
+                        draggable="false"
                       />
                       <Button
                         variant="contained"
