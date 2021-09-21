@@ -1,7 +1,7 @@
 .layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
 }
 
 .header {
@@ -20,7 +20,6 @@
 
 .nav {
   height: 10vh;
-  padding-top: 5rem;
   display: flex;
   justify-content: center;
   align-items: flex-end;
