@@ -90,7 +90,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
           alt={"secret flower pic"}
           className={styles.notBoughtPicDialog}
         />
-        <Grid container justifyContent="center">
+        <Grid container justifyContent="center" className={styles.coinlabel}>
           <img src={CoinAsset} alt="" className={styles.coin} />
           <DialogContentText className={classes.priceText}>
             {selectFlower.price}
