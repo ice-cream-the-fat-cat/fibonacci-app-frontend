@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: "1rem",
     },
     priceText: {
-      fontSize: "1.5rem",
+      fontSize: "1.2rem",
       lineHeight: "1.4rem",
       textAlign: "center",
       fontWeight: "bold",
