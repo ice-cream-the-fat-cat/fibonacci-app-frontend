@@ -53,11 +53,11 @@ export const Header = () => {
 
   return (
     <AppBar
-      position="static"
+      position="fixed"
       className={styles.header}
       classes={{ root: classes.root }}
     >
-      <Link to="/" className={styles.logoWrapper}>
+      <Link to="/user/myniwa" className={styles.logoWrapper}>
         <img className={styles.logo} src={MyNiwaLogo} alt="my niwa logo" />
       </Link>
 
