@@ -62,7 +62,10 @@ export const About = () => {
                         Create a flower bed with Seeds (good habits you'd like
                         to have!)
                       </li>
-                      <li>Do your Daily Gardening (maintain your habits) to gain coins!</li>
+                      <li>
+                        Do your Daily Gardening (maintain your habits) to gain
+                        coins!
+                      </li>
                       <li>Use your coins to buy flowers at the store.</li>
                       {/* <li>Or try your luck with the gacha for rare flowers!</li> */}
                       <li>

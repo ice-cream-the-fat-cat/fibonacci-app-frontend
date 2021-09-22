@@ -15,10 +15,10 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: "4%",
       backgroundColor: theme.palette.text.primary,
       color: theme.palette.background.default,
-      '&:hover': {
+      "&:hover": {
         backgroundColor: "#172F4ABB",
         color: theme.palette.background.paper,
-      }
+      },
     },
   })
 );

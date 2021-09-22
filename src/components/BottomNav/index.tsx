@@ -25,7 +25,7 @@ const useStyles = makeStyles(() =>
       left: 0,
       paddingBottom: `env(safe-area-inset-bottom)`,
       paddingLeft: `env(safe-area-inset-left)`,
-      paddingRight: `env(safe-area-inset-right)`
+      paddingRight: `env(safe-area-inset-right)`,
     },
     root: {
       padding: "1%",
