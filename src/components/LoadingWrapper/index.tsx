@@ -10,8 +10,7 @@ export const LoadingWrapper: React.FC<{ isLoading: boolean, isSmall?: boolean }>
   return (
     <>
       {isLoading ? (
-        <div className={styles.wrapper}>
-          {/* <CircularProgress /> */}
+        <div className={isSmall ? styles.smallWrapper : styles.wrapper}>
           <CustomSpinner isSmall={isSmall}/>
         </div>
       ) : (
