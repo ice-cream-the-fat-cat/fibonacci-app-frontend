@@ -22,12 +22,10 @@ router.delete(
   "/:taskId/fireBaseUserId/:userId",
   (req: Request, res: Response) => {
     setTimeout(() => {
-      res
-        .status(200)
-        .json({
-          ...completedTask.user,
-          balance: completedTask.user.balance - 1,
-        });
+      res.status(200).json({
+        ...completedTask.user,
+        balance: completedTask.user.balance - 1,
+      });
     }, 1000);
   }
 );

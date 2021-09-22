@@ -41,10 +41,10 @@ const useStyles = makeStyles((theme: Theme) =>
     returnButton: {
       backgroundColor: theme.palette.text.primary,
       color: theme.palette.background.default,
-      '&:hover': {
+      "&:hover": {
         backgroundColor: "#172F4ABB",
         color: theme.palette.background.paper,
-      }
+      },
     },
   })
 );
