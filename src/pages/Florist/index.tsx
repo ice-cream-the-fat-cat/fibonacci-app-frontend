@@ -12,6 +12,7 @@ import { Flower } from "../../models/flower.model";
 import { useUserState } from "../../store/user/useUserState";
 import { useApi } from "../../utils/api/useApi";
 import { AlertDialog } from "./component/dialog";
+import CoinAsset from "./assets/coin.png";
 import styles from "./Florist.module.css";
 
 // TODO: Refactor page layout
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     card: {
       margin: "1%",
-      height: "30%",
+      height: "40%",
       width: "30%",
       display: "flex",
       flexDirection: "column",
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     cardBought: {
       margin: "1%",
-      height: "30%",
+      height: "40%",
       width: "30%",
       display: "flex",
       flexDirection: "column",
@@ -60,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: "4px",
     },
     boughtName: {
-      minHeight: "40px",
+      minHeight: "5rem",
       textAlign: "center",
       marginTop: "5%",
       fontWeight: "bold",
@@ -70,13 +71,17 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.error.light,
     },
     notBoughtName: {
-      minHeight: "20px",
+      minHeight: "3rem",
       textAlign: "center",
       marginTop: "5%",
     },
     buyButton: {
-      marginBottom: "0.125rem",
+      margin: "0.3rem 0 0.3rem 0",
+      lineHeight: "1rem",
+      alignItems: "center",
       width: "100%",
+      fontSize: "1rem",
+      fontWeight: "bold",
     },
     errorMsg: {
       backgroundColor: theme.palette.error.light,
@@ -194,7 +199,7 @@ export const Florist = () => {
               </Typography>
             ) : (
               <Grid className={classes.subtitle}>
-                <Typography variant="h6">Welcome to our store.</Typography>
+                <Typography variant="h6">Welcome to our store!</Typography>
                 {!userData.balance ? (
                   <Typography variant="body1" className={classes.noCoin}>
                     To buy flowers you need coins! Plant some seeds and your
@@ -202,7 +207,7 @@ export const Florist = () => {
                   </Typography>
                 ) : (
                   <Typography variant="body1" className={classes.welcomeText}>
-                    Why don't you take a look around?
+                    Anything catch your eye?
                   </Typography>
                 )}
               </Grid>
@@ -226,7 +231,7 @@ export const Florist = () => {
                     key={flower._id}
                   >
                     <Typography
-                      variant="caption"
+                      variant="subtitle1"
                       className={classes.boughtName}
                     >
                       {flower.name}
@@ -235,6 +240,7 @@ export const Florist = () => {
                       src={flower.imageURL}
                       alt={`${flower.name} pic`}
                       className={styles.boughtPic}
+                      draggable="false"
                     />
                   </Grid>
                 ) : (
@@ -251,9 +257,10 @@ export const Florist = () => {
                         flower._id === lastBought &&
                         buyFlowerAPIState.status === "loading"
                       }
+                      isSmall
                     >
                       <Typography
-                        variant="caption"
+                        variant="subtitle1"
                         className={classes.notBoughtName}
                       >
                         ???
@@ -262,6 +269,7 @@ export const Florist = () => {
                         src={flower.imageURL}
                         alt={"secret flower pic"}
                         className={styles.notBoughtPic}
+                        draggable="false"
                       />
                       <Button
                         variant="contained"
@@ -275,7 +283,10 @@ export const Florist = () => {
                           !userData.balance || flower.price > userData.balance
                         }
                       >
-                        Buy: {flower.price}
+                        <img src={CoinAsset} alt="" className={styles.coin} />
+                        <span className={styles.flowerPrice}>
+                          {flower.price}
+                        </span>
                       </Button>
                     </LoadingWrapper>
                   </Grid>
