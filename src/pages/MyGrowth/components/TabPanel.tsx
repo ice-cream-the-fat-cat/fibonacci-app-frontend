@@ -19,7 +19,11 @@ export const TabPanel = (props: TabPanelProps) => {
       aria-labelledby={`vertical-tab-${index}`}
       {...other}
     >
-      {value === index && <Grid className={styles.tabPanelContainer} container>{children}</Grid>}
+      {value === index && (
+        <Grid className={styles.tabPanelContainer} container>
+          {children}
+        </Grid>
+      )}
     </div>
   );
 };

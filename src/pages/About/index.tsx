@@ -54,16 +54,19 @@ export const About = () => {
                 />
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="h2">
-                    My Niwa is about growing a beautiful garden
+                    My Niwa is about growing a beautiful garden.
                   </Typography>
                   <Typography component="div">
                     <ol>
                       <li>
-                        Create a flower bed with seeds (good habits you'd like
+                        Create a flower bed with Seeds (good habits you'd like
                         to have!)
                       </li>
-                      <li>Every day, complete your seeds to gain coins!</li>
-                      <li>Use your coins to either buy flowers at the store</li>
+                      <li>
+                        Do your Daily Gardening (maintain your habits) to gain
+                        coins!
+                      </li>
+                      <li>Use your coins to buy flowers at the store.</li>
                       {/* <li>Or try your luck with the gacha for rare flowers!</li> */}
                       <li>
                         Try to collect all the flowers while bettering yourself!
