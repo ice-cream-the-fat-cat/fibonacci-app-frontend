@@ -4,11 +4,12 @@ import { useEffect, useMemo } from "react";
 import { useApi } from "../../utils/api/useApi";
 import { getFlowers } from "../../helpers/api/flowers/getFlowers";
 import { useUserState } from "../../store/user/useUserState";
+import { LoadingWrapper } from "../../components/LoadingWrapper";
 
 export const MyCollection = () => {
   const [flowersAPIState, getAllFlowers] = useApi(getFlowers);
 
-  const { userData, setUserData } = useUserState();
+  const { userData } = useUserState();
 
   const allFlowers = useMemo(
     () => flowersAPIState.response ?? [],
@@ -33,7 +34,7 @@ export const MyCollection = () => {
       exit={{ opacity: 0 }}
       className="myCollectionPage"
     >
-      <div>
+      <LoadingWrapper isLoading={flowersAPIState.status === "loading"}>
         <div
           className="collection-box"
           style={{
@@ -83,7 +84,7 @@ export const MyCollection = () => {
             <div className="foreground-grass grass-animation"></div>
           </motion.div>
         </div>
-      </div>
+      </LoadingWrapper>
     </motion.div>
   );
 };
