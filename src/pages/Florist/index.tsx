@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     card: {
       margin: "1%",
-      height: "30%",
+      height: "40%",
       width: "30%",
       display: "flex",
       flexDirection: "column",
@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     cardBought: {
       margin: "1%",
-      height: "30%",
+      height: "40%",
       width: "30%",
       display: "flex",
       flexDirection: "column",
@@ -61,7 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
       borderRadius: "4px",
     },
     boughtName: {
-      minHeight: "40px",
+      minHeight: "5rem",
       textAlign: "center",
       marginTop: "5%",
       fontWeight: "bold",
@@ -71,14 +71,16 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: theme.palette.error.light,
     },
     notBoughtName: {
-      minHeight: "20px",
+      minHeight: "3rem",
       textAlign: "center",
       marginTop: "5%",
     },
     buyButton: {
-      marginBottom: "0.125rem",
+      margin: "0.3rem 0 0.3rem 0",
+      lineHeight: "1rem",
+      alignItems: "center",
       width: "100%",
-      fontSize: "1.2rem",
+      fontSize: "1rem",
       fontWeight: "bold",
     },
     errorMsg: {
@@ -197,7 +199,7 @@ export const Florist = () => {
               </Typography>
             ) : (
               <Grid className={classes.subtitle}>
-                <Typography variant="h6">Welcome to our store.</Typography>
+                <Typography variant="h6">Welcome to our store!</Typography>
                 {!userData.balance ? (
                   <Typography variant="body1" className={classes.noCoin}>
                     To buy flowers you need coins! Plant some seeds and your
@@ -205,7 +207,7 @@ export const Florist = () => {
                   </Typography>
                 ) : (
                   <Typography variant="body1" className={classes.welcomeText}>
-                    Why don't you take a look around?
+                    Anything catch your eye?
                   </Typography>
                 )}
               </Grid>
@@ -229,7 +231,7 @@ export const Florist = () => {
                     key={flower._id}
                   >
                     <Typography
-                      variant="caption"
+                      variant="subtitle1"
                       className={classes.boughtName}
                     >
                       {flower.name}
@@ -257,7 +259,7 @@ export const Florist = () => {
                       }
                     >
                       <Typography
-                        variant="caption"
+                        variant="subtitle1"
                         className={classes.notBoughtName}
                       >
                         ???
@@ -281,7 +283,9 @@ export const Florist = () => {
                         }
                       >
                         <img src={CoinAsset} alt="" className={styles.coin} />
-                        {flower.price}
+                        <span className={styles.flowerPrice}>
+                          {flower.price}
+                        </span>
                       </Button>
                     </LoadingWrapper>
                   </Grid>

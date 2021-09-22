@@ -32,12 +32,14 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: "center",
     },
     confirmText: {
-      fontSize: "0.5rem",
+      fontSize: "1rem",
     },
     priceText: {
+      fontSize: "1.2rem",
+      lineHeight: "1.4rem",
       textAlign: "center",
       fontWeight: "bold",
-      fontSize: "1.3rem",
+      marginLeft: ".2rem",
     },
     confirmButton: {
       alignItems: "center",
@@ -80,7 +82,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
       aria-describedby="alert-dialog-description"
     >
       <DialogTitle id="alert-dialog-title" className={classes.confirmText}>
-        Are you sure you want to buy this?
+        Are you sure you want to buy this flower?
       </DialogTitle>
       <DialogContent className={classes.dialog}>
         <img
@@ -88,7 +90,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
           alt={"secret flower pic"}
           className={styles.notBoughtPicDialog}
         />
-        <Grid container justifyContent="center">
+        <Grid container justifyContent="center" className={styles.coinlabel}>
           <img src={CoinAsset} alt="" className={styles.coin} />
           <DialogContentText className={classes.priceText}>
             {selectFlower.price}
