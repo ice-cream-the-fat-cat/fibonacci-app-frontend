@@ -3,5 +3,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 80px;
+  margin-top: 20%;
+  width: 100%;
+}
+
+.smallWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50%;
+  width: 100%;
 }
