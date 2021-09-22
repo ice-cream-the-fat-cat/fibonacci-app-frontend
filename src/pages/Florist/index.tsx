@@ -257,6 +257,7 @@ export const Florist = () => {
                         flower._id === lastBought &&
                         buyFlowerAPIState.status === "loading"
                       }
+                      isSmall
                     >
                       <Typography
                         variant="subtitle1"

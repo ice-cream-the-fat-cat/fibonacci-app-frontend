@@ -1,0 +1,15 @@
+.spinnerContainer {
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinnerSmall {
+  width: 45px;
+  height: 45px;
+}
+
+.spinner {
+  width: 100%;
+}
