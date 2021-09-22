@@ -22,6 +22,10 @@ const useStyles = makeStyles(() =>
     appBar: {
       top: "auto",
       bottom: 0,
+      left: 0,
+      paddingBottom: `env(safe-area-inset-bottom)`,
+      paddingLeft: `env(safe-area-inset-left)`,
+      paddingRight: `env(safe-area-inset-right)`
     },
     root: {
       padding: "1%",
@@ -43,7 +47,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
   const classes = useStyles();
   const navClasses = useNavStyles();
   return (
-    <AppBar position="static" className={classes.appBar}>
+    <AppBar position="fixed" className={classes.appBar}>
       <BottomNavigation
         value={currentPage}
         onChange={handlePageChange}
@@ -56,7 +60,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({
           icon={<EmojiNatureIcon />}
         ></BottomNavigationAction>
         <BottomNavigationAction
-          label="My Collection"
+          label="My Niwa"
           showLabel={true}
           value="/user/myCollection"
           icon={<LocalFloristIcon />}
